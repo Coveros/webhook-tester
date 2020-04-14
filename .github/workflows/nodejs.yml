@@ -6,8 +6,13 @@ name: Node.js CI
 on:
   push:
     branches: [ master ]
+    tags: [ v* ]
   pull_request:
     branches: [ master ]
+
+env:
+  IMAGE_NAME: coveros/webhook-tester
+  DOCKER_USER: jwhollingsworth
 
 jobs:
   build:
@@ -32,5 +37,33 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag coveros/webhook-tester
+        run: docker build --file Dockerfile .
+  push-image:
+    needs: build-image
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v2
 
+      - name: Build image
+        run: docker build --file Dockerfile --tag image .
+
+      - name: Log into registry
+        run: echo "${{ secrets.github_token }}" | docker login -u $DOCKER_USER --password-stdin
+
+      - name: Push image
+        run: |
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+
+          echo IMAGE_NAME=$IMAGE_NAME
+          echo VERSION=$VERSION
+
+          docker tag image $IMAGE_NAME:$VERSION
+          docker push $IMAGE_NAME:$VERSION
