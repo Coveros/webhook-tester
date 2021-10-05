@@ -15,6 +15,8 @@ module.exports = (app, { port = 8080 }) => {
   app.post('/json-hook', jsonParser, (req, res) => {
     console.log('Webhook Request Body:')
     console.log(JSON.stringify(req.body, null, 2))
+    console.log('Webhook Request Headers:')
+    console.log(JSON.stringify(req.headers, null, 2))
     res.status(200).send()
   })
 

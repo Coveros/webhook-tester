@@ -1,6 +1,6 @@
 {
   "name": "@coveros/webhook-tester",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Listens to and logs requests",
   "main": "index.js",
   "scripts": {
@@ -20,13 +20,13 @@
   "homepage": "https://github.com/Coveros/webhook-tester#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "dotenv": "^9.0.0",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "jest": "^26.6.3",
+    "jest": "^27.2.4",
     "jest-express": "^1.12.0",
-    "standard": "^16.0.3"
+    "standard": "^16.0.4"
   },
   "standard": {
     "env": [

@@ -11,7 +11,7 @@ application that listens to and logs requests. Currently, it responds to two rou
 1. GET /healthcheck
     * This will return a 200 OK response
 2. POST /json-hook
-    * This will output the JSON request body, and return a 200 OK response
+    * This will output the JSON request body and headers, and return a 200 OK response
 
 All other requests will be logged and return a 404 Not Found response.
 
@@ -54,7 +54,11 @@ Webhook Request Body:
 {
   "test": "123"
 }
-
+Webhook Request Headers:
+{
+  "connection": "keep-alive",
+  "content-length": "0"
+}
 ```
 
 ### Configure the Port
