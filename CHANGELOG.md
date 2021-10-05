@@ -10,3 +10,4 @@ All notable changes to this project will be documented in this file.
 - Change CI Node.js version to 14
 - Publish images to GitHub Registry
 - Add Helm chart
+ 
