@@ -1,3 +1,6 @@
 .*
 node_modules
 README.md
+charts
+ct.yaml
+CHANGELOG.md
