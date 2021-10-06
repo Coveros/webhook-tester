@@ -28,9 +28,9 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /health-check
+              path: /healthcheck
               port: http
           readinessProbe:
             httpGet:
-              path: /health-check
+              path: /healthcheck
               port: http
