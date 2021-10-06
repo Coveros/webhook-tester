@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/coveros/codeveros-gateway
+  repository: ghcr.io/coveros/webhook-tester
   pullPolicy: IfNotPresent
   tag: ""
 
@@ -12,6 +12,7 @@ imagePullSecrets: []
 service:
   type: ClusterIP
   port: 8080
+  nodePort:
 
 ingress:
   annotations: {}
