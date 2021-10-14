@@ -69,3 +69,68 @@ listens. Changing this value necessitates updating the port mapping configuratio
 ```
 $ docker run --rm -e PORT=3000 -p 8080:3000 --name webhook-tester coveros/webhook-tester
 ```
+
+## Deploy to Kubernetes cluster
+
+There are a number of options to deploy the webhook-tester into a Kubernetes cluster. One option is to use `kubectl` to create and expose a simple webhook-tester deployment. These commands will create the deployment and service into the default namespace, and internally expose it. For external access, you will either need to use an Ingress, or change the service from `ClusterIP` to `NodePort` or `LoadBalancer` type.
+
+Create Deployment
+
+```
+$ kubectl create deploy webhook-tester --image=ghcr.io/coveros/webhook-tester:edge 
+```
+
+Expose Deployment
+
+```
+$ kubectl expose deploy webhook-tester --port=8080
+```
+
+Alternatively, you can apply this file
+
+```yaml
+# webhook-tester.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: webhook-tester
+  name: webhook-tester
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webhook-tester
+  template:
+    metadata:
+      labels:
+        app: webhook-tester
+    spec:
+      containers:
+        - image: ghcr.io/coveros/webhook-tester:edge
+          name: webhook-tester
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-tester
+  labels:
+    app: webhook-tester
+spec:
+  selector:
+    app: webhook-tester
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+```
+
+```
+$ kubectl apply -f webhook-tester.yaml
+```
+
+## Helm chart release
+
+...Upcoming instructions....
